@@ -96,7 +96,7 @@ def _wide(mode, data):
 
 
 def _accent(mode, colors):
-    """N-Red on the -r cards, kept off the portrait."""
+    """N-Red on the latest day of an -r card. Kept off the portrait."""
     return colors["mark"] if mode.endswith("-r") else None
 
 
@@ -131,13 +131,17 @@ def _who(data, colors, width, mode, total_size=22):
 
 
 def _portrait(dots, x, y, size, colors, mode):
-    """Face in the figure colour. Red, blue, and yellow use that colour for the contour too."""
-    step = size / 18
-    radius = {1: step * 0.28, 2: step * 0.38, 3: step * 0.46}
+    """Circles, coarse enough to read as circles. The face uses the figure colour."""
+    buckets = {}
+    for col, row, kind in dots:
+        key = (col // 2, row // 2)
+        buckets[key] = max(buckets.get(key, 0), kind)
+    step = size / 9
+    radius = {1: step * 0.42, 2: step * 0.46, 3: step * 0.50}
     contour = colors["figure"] if mode in ("red", "blue", "yellow") else colors["muted"]
     fill = {1: contour, 2: colors["figure"], 3: colors["figure"]}
     parts = []
-    for col, row, kind in dots:
+    for (col, row), kind in buckets.items():
         parts.append(
             f'<circle cx="{x + (col + 0.5) * step:.2f}" cy="{y + (row + 0.5) * step:.2f}" '
             f'r="{radius[kind]:.2f}" fill="{fill[kind]}"/>'
@@ -262,20 +266,26 @@ def _graph(days, x, y, weeks, cell, gap, colors, show=None, accent=None):
     shown = weeks if show is None else show
     origin = weeks - shown
     parts = []
+    latest = None
     for week, row, count in cells:
         if week < origin:
             continue
         rank = level(count)
-        if rank == 4 and accent:
-            fill, extra = accent, ""
-        elif rank == 0:
+        if rank == 0:
             fill, extra = colors["rule"], ""
         else:
             fill = colors["figure"]
             extra = f' opacity="{opacity[rank]}"' if rank in opacity else ""
+        latest = (week, row)
         parts.append(
             f'<rect x="{x + (week - origin) * step}" y="{y + row * step}" width="{cell}" height="{cell}" '
             f'fill="{fill}"{extra}/>'
+        )
+    if accent and latest:
+        week, row = latest
+        parts.append(
+            f'<rect x="{x + (week - origin) * step}" y="{y + row * step}" width="{cell}" height="{cell}" '
+            f'fill="{accent}"/>'
         )
     return "".join(parts)
 
