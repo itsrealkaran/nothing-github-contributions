@@ -1,37 +1,71 @@
-"""Contribution card for any GitHub username."""
+"""Contribution card. Compact and regular stay numeric. Wide adds a glyph year."""
 
 import sys
 from pathlib import Path
 
-from frame import dots, label, open_svg
+from frame import dots, label, open_svg, week_glyphs
 from github_user import contributions
-from nothing import MODES, SCALE, SIZES, theme
+from nothing import MODES, SIZES
 
 ROOT = Path(__file__).resolve().parent
 
 
 def render(mode, size, data):
-    scale = SCALE[size]
-    colors = theme(mode)
-    width = int(640 * scale)
-    height = int(260 * scale)
+    if size == "compact":
+        return _compact(mode, data)
+    if size == "wide":
+        return _wide(mode, data)
+    return _regular(mode, data)
 
-    def n(value):
-        return round(value * scale, 1)
 
-    name, _ = dots("CONTRIBUTIONS", n(46), n(22), colors["fg"], scale=2.1 * scale)
-    parts = [
-        open_svg(mode, width, height, f"{data['login']} contributions"),
+def _colors(mode):
+    from nothing import theme
+    return theme(mode)
+
+
+def _compact(mode, data):
+    colors = _colors(mode)
+    name, _ = dots("CONTRIBUTIONS", 40, 16, colors["fg"], scale=1.8)
+    return "\n".join([
+        open_svg(mode, 495, 132, f"{data['login']} contributions"),
         name,
-        label(n(28), n(168), f"{data['last_year']:,}", colors["figure"], n(42), -0.8),
-        label(n(330), n(168), f"{data['all_time']:,}", colors["figure"], n(42), -0.8),
-        label(n(28), n(196), "Last 12 months", colors["muted"], n(13), 0.6),
-        label(n(330), n(196), f"Since {data['since']}", colors["muted"], n(13), 0.6),
-        f'<line x1="{n(28)}" y1="{n(216)}" x2="{width - n(28)}" y2="{n(216)}" stroke="{colors["rule"]}"/>',
-        label(n(28), n(240), f"@{data['login']} · {data['stars']} {data['stars_label']}", colors["fg"], n(13), 0.2),
+        label(20, 108, f"{data['last_year']:,}", colors["figure"], 36, -1),
+        label(280, 86, "Last 12 months", colors["muted"], 13, 0.4),
+        label(280, 108, f"@{data['login']}", colors["fg"], 14, 0.2),
         "</svg>",
-    ]
-    return "\n".join(parts)
+    ])
+
+
+def _regular(mode, data):
+    colors = _colors(mode)
+    name, _ = dots("CONTRIBUTIONS", 40, 16, colors["fg"], scale=1.8)
+    return "\n".join([
+        open_svg(mode, 495, 195, f"{data['login']} contributions"),
+        name,
+        label(20, 118, f"{data['last_year']:,}", colors["figure"], 32, -0.8),
+        label(250, 118, f"{data['all_time']:,}", colors["figure"], 32, -0.8),
+        label(20, 142, "Last 12 months", colors["muted"], 12, 0.4),
+        label(250, 142, f"Since {data['since']}", colors["muted"], 12, 0.4),
+        f'<line x1="20" y1="158" x2="475" y2="158" stroke="{colors["rule"]}"/>',
+        label(20, 180, f"@{data['login']} · {data['stars']} {data['stars_label']}", colors["fg"], 12, 0.2),
+        "</svg>",
+    ])
+
+
+def _wide(mode, data):
+    colors = _colors(mode)
+    name, _ = dots("CONTRIBUTIONS", 40, 16, colors["fg"], scale=1.8)
+    glyphs = week_glyphs(data["days"], 32, 310, 72, 12, 3, colors["figure"], colors["rule"])
+    return "\n".join([
+        open_svg(mode, 896, 240, f"{data['login']} contributions"),
+        name,
+        label(20, 120, f"{data['last_year']:,}", colors["figure"], 40, -1),
+        label(20, 148, "Last 12 months", colors["muted"], 13, 0.4),
+        label(20, 200, f"{data['all_time']:,} since {data['since']}", colors["fg"], 14, 0.2),
+        glyphs,
+        label(310, 214, "Last 32 weeks", colors["muted"], 12, 0.4),
+        "</svg>",
+    ])
 
 
 def main():
@@ -39,7 +73,7 @@ def main():
     data = contributions(login)
     out = ROOT / "dist" / data["login"]
     out.mkdir(parents=True, exist_ok=True)
-    lines = [f"# {data['login']}", "", "Username, mode, and size.", ""]
+    lines = [f"# {data['login']}", "", "Compact and regular are number widgets. Wide is the glyph widget.", ""]
     for mode in MODES:
         lines += [f"## {mode}", ""]
         for size in SIZES:
@@ -47,7 +81,7 @@ def main():
             (out / filename).write_text(render(mode, size, data))
             lines += [f"### {size}", "", f"![{mode} {size}](dist/{data['login']}/{filename})", ""]
             print(data["login"], mode, size)
-    (ROOT / "DUMMY.md").write_text("\n".join(lines))
+    (ROOT / "DUMMY.md").write_text("\n".join(lines) + "\n")
 
 
 if __name__ == "__main__":
