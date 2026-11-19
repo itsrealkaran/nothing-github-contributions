@@ -11,6 +11,8 @@ import urllib.request
 from collections import Counter
 from datetime import datetime, timedelta, timezone
 
+from glyph import cells as glyph_cells
+
 API = "https://api.github.com/"
 
 
@@ -145,7 +147,7 @@ def _calendar(login, start, end):
     return calendar["totalContributions"], days
 
 
-def contributions(login):
+def contributions(login, glyph=True):
     info = profile(login)
     now = datetime.now(timezone.utc).replace(microsecond=0)
     last_year, _days = _calendar(login, now - timedelta(days=364), now)
@@ -173,7 +175,20 @@ def contributions(login):
         "longest": longest,
         "languages": _top_public(repos),
         "days": all_days,
+        "glyph": _glyph(login) if glyph else [],
     }
+
+
+def _glyph(login):
+    try:
+        request = urllib.request.Request(
+            f"https://github.com/{login}.png",
+            headers={"User-Agent": "nothing-stat-card"},
+        )
+        with urllib.request.urlopen(request, timeout=20) as response:
+            return glyph_cells(response.read())
+    except (OSError, ValueError):
+        return []
 
 
 def _streaks(days):
@@ -219,7 +234,7 @@ def _top_public(repos):
 
 
 def streak(login):
-    data = contributions(login)
+    data = contributions(login, glyph=False)
     parsed = []
     for day, count in data["days"]:
         parsed.append((datetime.strptime(day, "%Y-%m-%d").date(), count))
@@ -265,7 +280,7 @@ def streak(login):
 
 
 def activity(login):
-    data = contributions(login)
+    data = contributions(login, glyph=False)
     counts = Counter()
     for day, count in data["days"]:
         counts[day[:4]] += count

@@ -40,7 +40,7 @@ def _mini(mode, data):
 def _compact(mode, data):
     colors = _colors(mode)
     parts = [
-        open_svg(mode, 495, 168, f"{data['login']} contributions"),
+        _open(mode, 495, 168, data),
         *_who(data, colors, 495),
         _hline(colors, 20, 475, 76),
         *_stats(data, colors, 495, 116, 138, 92, 150),
@@ -52,7 +52,7 @@ def _regular(mode, data):
     colors = _colors(mode)
     graph = _graph(data["days"], 20, 82, 495, 53, 7, colors)
     parts = [
-        open_svg(mode, 495, 250, f"{data['login']} contributions"),
+        _open(mode, 495, 250, data),
         *_who(data, colors, 495),
         _hline(colors, 20, 475, 70),
         graph,
@@ -66,7 +66,7 @@ def _wide(mode, data):
     colors = _colors(mode)
     graph = _graph(data["days"], 20, 88, 896, 53, 13, colors)
     parts = [
-        open_svg(mode, 896, 318, f"{data['login']} contributions"),
+        _open(mode, 896, 318, data),
         *_who(data, colors, 896, total_size=28),
         _hline(colors, 20, 876, 74),
         graph,
@@ -77,13 +77,41 @@ def _wide(mode, data):
     return "\n".join(parts + ["</svg>"])
 
 
+def _open(mode, width, height, data):
+    mark = 0 if data.get("glyph") else 8
+    return open_svg(mode, width, height, f"{data['login']} contributions", mark=mark)
+
+
 def _who(data, colors, width, total_size=22):
-    return [
-        label(40, 36, data["name"], colors["fg"], 16, 0),
-        label(40, 56, f"@{data['login']}", colors["muted"], 12, 0.2),
+    portrait = data.get("glyph") or []
+    if portrait:
+        head = [
+            _portrait(portrait, 18, 14, 48, colors),
+            label(78, 36, data["name"], colors["fg"], 16, 0),
+            label(78, 56, f"@{data['login']}", colors["muted"], 12, 0.2),
+        ]
+    else:
+        head = [
+            label(40, 36, data["name"], colors["fg"], 16, 0),
+            label(40, 56, f"@{data['login']}", colors["muted"], 12, 0.2),
+        ]
+    return head + [
         label(width - 20, 40, f"{data['all_time']:,}", colors["figure"], total_size, -0.6, anchor="end"),
         label(width - 20, 60, f"contributions since {data['year']}", colors["muted"], 12, 0.2, anchor="end"),
     ]
+
+
+def _portrait(dots, x, y, size, colors):
+    step = size / 18
+    radius = {1: step * 0.28, 2: step * 0.38, 3: step * 0.46}
+    fill = {1: colors["muted"], 2: colors["figure"], 3: colors["figure"]}
+    parts = []
+    for col, row, kind in dots:
+        parts.append(
+            f'<circle cx="{x + (col + 0.5) * step:.2f}" cy="{y + (row + 0.5) * step:.2f}" '
+            f'r="{radius[kind]:.2f}" fill="{fill[kind]}"/>'
+        )
+    return "".join(parts)
 
 
 def _year_line(data, colors, x, y):
