@@ -1,116 +1,212 @@
 # itsrealkaran
 
-Compact and regular are number widgets. Wide is the glyph widget.
+Mini is the short rectangle. Compact and regular are number widgets. Wide is the glyph widget.
 
 ## classic
 
-### compact
+**contributions** · classic · mini
 
-![classic compact](dist/itsrealkaran/classic-compact.svg)
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=classic&size=mini`
 
-### regular
+![contributions classic mini](dist/itsrealkaran/classic-mini.svg)
 
-![classic regular](dist/itsrealkaran/classic-regular.svg)
+**contributions** · classic · compact
 
-### wide
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=classic&size=compact`
 
-![classic wide](dist/itsrealkaran/classic-wide.svg)
+![contributions classic compact](dist/itsrealkaran/classic-compact.svg)
+
+**contributions** · classic · regular
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=classic&size=regular`
+
+![contributions classic regular](dist/itsrealkaran/classic-regular.svg)
+
+**contributions** · classic · wide
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=classic&size=wide`
+
+![contributions classic wide](dist/itsrealkaran/classic-wide.svg)
 
 ## classic-r
 
-### compact
+**contributions** · classic-r · mini
 
-![classic-r compact](dist/itsrealkaran/classic-r-compact.svg)
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=classic-r&size=mini`
 
-### regular
+![contributions classic-r mini](dist/itsrealkaran/classic-r-mini.svg)
 
-![classic-r regular](dist/itsrealkaran/classic-r-regular.svg)
+**contributions** · classic-r · compact
 
-### wide
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=classic-r&size=compact`
 
-![classic-r wide](dist/itsrealkaran/classic-r-wide.svg)
+![contributions classic-r compact](dist/itsrealkaran/classic-r-compact.svg)
+
+**contributions** · classic-r · regular
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=classic-r&size=regular`
+
+![contributions classic-r regular](dist/itsrealkaran/classic-r-regular.svg)
+
+**contributions** · classic-r · wide
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=classic-r&size=wide`
+
+![contributions classic-r wide](dist/itsrealkaran/classic-r-wide.svg)
 
 ## white
 
-### compact
+**contributions** · white · mini
 
-![white compact](dist/itsrealkaran/white-compact.svg)
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=white&size=mini`
 
-### regular
+![contributions white mini](dist/itsrealkaran/white-mini.svg)
 
-![white regular](dist/itsrealkaran/white-regular.svg)
+**contributions** · white · compact
 
-### wide
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=white&size=compact`
 
-![white wide](dist/itsrealkaran/white-wide.svg)
+![contributions white compact](dist/itsrealkaran/white-compact.svg)
+
+**contributions** · white · regular
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=white&size=regular`
+
+![contributions white regular](dist/itsrealkaran/white-regular.svg)
+
+**contributions** · white · wide
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=white&size=wide`
+
+![contributions white wide](dist/itsrealkaran/white-wide.svg)
 
 ## white-r
 
-### compact
+**contributions** · white-r · mini
 
-![white-r compact](dist/itsrealkaran/white-r-compact.svg)
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=white-r&size=mini`
 
-### regular
+![contributions white-r mini](dist/itsrealkaran/white-r-mini.svg)
 
-![white-r regular](dist/itsrealkaran/white-r-regular.svg)
+**contributions** · white-r · compact
 
-### wide
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=white-r&size=compact`
 
-![white-r wide](dist/itsrealkaran/white-r-wide.svg)
+![contributions white-r compact](dist/itsrealkaran/white-r-compact.svg)
+
+**contributions** · white-r · regular
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=white-r&size=regular`
+
+![contributions white-r regular](dist/itsrealkaran/white-r-regular.svg)
+
+**contributions** · white-r · wide
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=white-r&size=wide`
+
+![contributions white-r wide](dist/itsrealkaran/white-r-wide.svg)
 
 ## light
 
-### compact
+**contributions** · light · mini
 
-![light compact](dist/itsrealkaran/light-compact.svg)
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=light&size=mini`
 
-### regular
+![contributions light mini](dist/itsrealkaran/light-mini.svg)
 
-![light regular](dist/itsrealkaran/light-regular.svg)
+**contributions** · light · compact
 
-### wide
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=light&size=compact`
 
-![light wide](dist/itsrealkaran/light-wide.svg)
+![contributions light compact](dist/itsrealkaran/light-compact.svg)
+
+**contributions** · light · regular
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=light&size=regular`
+
+![contributions light regular](dist/itsrealkaran/light-regular.svg)
+
+**contributions** · light · wide
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=light&size=wide`
+
+![contributions light wide](dist/itsrealkaran/light-wide.svg)
 
 ## red
 
-### compact
+**contributions** · red · mini
 
-![red compact](dist/itsrealkaran/red-compact.svg)
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=red&size=mini`
 
-### regular
+![contributions red mini](dist/itsrealkaran/red-mini.svg)
 
-![red regular](dist/itsrealkaran/red-regular.svg)
+**contributions** · red · compact
 
-### wide
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=red&size=compact`
 
-![red wide](dist/itsrealkaran/red-wide.svg)
+![contributions red compact](dist/itsrealkaran/red-compact.svg)
+
+**contributions** · red · regular
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=red&size=regular`
+
+![contributions red regular](dist/itsrealkaran/red-regular.svg)
+
+**contributions** · red · wide
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=red&size=wide`
+
+![contributions red wide](dist/itsrealkaran/red-wide.svg)
 
 ## blue
 
-### compact
+**contributions** · blue · mini
 
-![blue compact](dist/itsrealkaran/blue-compact.svg)
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=blue&size=mini`
 
-### regular
+![contributions blue mini](dist/itsrealkaran/blue-mini.svg)
 
-![blue regular](dist/itsrealkaran/blue-regular.svg)
+**contributions** · blue · compact
 
-### wide
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=blue&size=compact`
 
-![blue wide](dist/itsrealkaran/blue-wide.svg)
+![contributions blue compact](dist/itsrealkaran/blue-compact.svg)
+
+**contributions** · blue · regular
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=blue&size=regular`
+
+![contributions blue regular](dist/itsrealkaran/blue-regular.svg)
+
+**contributions** · blue · wide
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=blue&size=wide`
+
+![contributions blue wide](dist/itsrealkaran/blue-wide.svg)
 
 ## yellow
 
-### compact
+**contributions** · yellow · mini
 
-![yellow compact](dist/itsrealkaran/yellow-compact.svg)
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=yellow&size=mini`
 
-### regular
+![contributions yellow mini](dist/itsrealkaran/yellow-mini.svg)
 
-![yellow regular](dist/itsrealkaran/yellow-regular.svg)
+**contributions** · yellow · compact
 
-### wide
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=yellow&size=compact`
 
-![yellow wide](dist/itsrealkaran/yellow-wide.svg)
+![contributions yellow compact](dist/itsrealkaran/yellow-compact.svg)
+
+**contributions** · yellow · regular
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=yellow&size=regular`
+
+![contributions yellow regular](dist/itsrealkaran/yellow-regular.svg)
+
+**contributions** · yellow · wide
+
+`https://github.com/itsrealkaran/contributions?username=itsrealkaran&theme=yellow&size=wide`
+
+![contributions yellow wide](dist/itsrealkaran/yellow-wide.svg)
 
