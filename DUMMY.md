@@ -1,6 +1,6 @@
 # itsrealkaran
 
-The year is a grid. Under it: the last year, the longest streak, the current streak, and stars.
+The year is a field of equal squares. A day lights one more square at each step. Under it: the last year, the longest streak, the current streak, and stars.
 
 ## classic
 
