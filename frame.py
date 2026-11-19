@@ -1,4 +1,4 @@
-"""SVG frame shared by one card. The dot grid never sets body copy."""
+"""SVG frame shared by one card. The dot grid draws the figures. Labels stay mono."""
 
 from datetime import datetime, timedelta, timezone
 
@@ -19,7 +19,7 @@ def dots(text, x, y, fill, scale=2.4):
                     parts.append(
                         f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{scale / 2:.2f}" fill="{fill}"/>'
                     )
-        cursor += 5 * step + scale
+        cursor += 3 * step if char == "," else 5 * step + scale
     return "".join(parts), cursor - x
 
 
