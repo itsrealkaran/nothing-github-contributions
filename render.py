@@ -26,14 +26,28 @@ def _colors(mode):
 
 
 def _mini(mode, data):
+    """Glyph and the last year, then the recent weeks at a size you can read."""
     colors = _colors(mode)
-    return "\n".join([
-        open_svg(mode, 220, 148, f"{data['login']} contributions", mark=6, margin=14),
-        label(28, 78, f"{data['last_year']:,}", colors["figure"], 28, -0.8),
-        label(28, 100, "Last year", colors["muted"], 11, 0.3),
-        label(28, 128, _span(data["current"], "day"), colors["fg"], 12, 0.2),
-        "</svg>",
-    ])
+    portrait = data.get("glyph") or []
+    parts = [
+        open_svg(
+            mode, 220, 176, f"{data['login']} contributions",
+            mark=0 if portrait else 6, margin=14,
+        ),
+    ]
+    if portrait:
+        parts.append(_portrait(portrait, 14, 14, 46, colors))
+        parts.append(label(70, 34, f"{data['last_year']:,}", colors["figure"], 22, -0.6))
+        parts.append(label(70, 52, "Last year", colors["muted"], 11, 0.3))
+    else:
+        parts.append(label(28, 42, f"{data['last_year']:,}", colors["figure"], 26, -0.8))
+        parts.append(label(28, 62, "Last year", colors["muted"], 11, 0.3))
+    parts.append(_graph(data["days"], 16, 76, 53, 8, 2, colors, show=19))
+    span = _span(data["current"], "day")
+    parts.append(label(16, 160, span, colors["figure"], 13, 0))
+    parts.append(label(16 + len(span) * 8 + 8, 160, "Current", colors["muted"], 13, 0.15))
+    parts.append("</svg>")
+    return "\n".join(parts)
 
 
 def _compact(mode, data):
@@ -148,7 +162,7 @@ def _span(count, word):
 
 
 # A day lights squares in reading order: one, the top pair, an L, then the block.
-def _graph(days, x, y, weeks, cell, gap, colors):
+def _graph(days, x, y, weeks, cell, gap, colors, show=None):
     by_day = {}
     for day, count in days:
         by_day[datetime.strptime(day, "%Y-%m-%d").date()] = count
@@ -181,13 +195,17 @@ def _graph(days, x, y, weeks, cell, gap, colors):
 
     opacity = {1: "0.35", 2: "0.55", 3: "0.78"}
     step = cell + gap
+    shown = weeks if show is None else show
+    origin = weeks - shown
     parts = []
     for week, row, count in cells:
+        if week < origin:
+            continue
         rank = level(count)
         fill = colors["rule"] if rank == 0 else colors["figure"]
         extra = f' opacity="{opacity[rank]}"' if rank in opacity else ""
         parts.append(
-            f'<rect x="{x + week * step}" y="{y + row * step}" width="{cell}" height="{cell}" '
+            f'<rect x="{x + (week - origin) * step}" y="{y + row * step}" width="{cell}" height="{cell}" '
             f'fill="{fill}"{extra}/>'
         )
     return "".join(parts)
