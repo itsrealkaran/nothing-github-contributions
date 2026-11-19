@@ -298,7 +298,7 @@ def _graph(days, x, y, weeks, cell, gap, colors, show=None, accent=None):
 
 
 def _variant(card, login, mode, size, filename):
-    url = f"https://github.com/itsrealkaran/{card}?username={login}&theme={mode}&size={size}"
+    url = f"https://github.com/itsrealkaran/nothing-github-contributions?username={login}&theme={mode}&size={size}"
     return [
         f"**{card}** · {mode} · {size}",
         "",
