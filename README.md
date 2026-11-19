@@ -95,6 +95,14 @@ This is the default. You can leave `theme` and `size` off and get this card.
 
 ![contributions classic regular](dist/itsrealkaran/classic-regular.svg)
 
+#### regular, no photo
+
+`glyph=0` hides the profile photo. `pfp=0` is the same parameter. The corner mark returns.
+
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic&size=regular&glyph=0`
+
+![contributions classic regular without the profile photo](dist/itsrealkaran/classic-regular-glyph.svg)
+
 #### wide
 
 `https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic&size=wide`

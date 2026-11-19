@@ -297,10 +297,13 @@ def _graph(days, x, y, weeks, cell, gap, colors, show=None, accent=None):
     return "".join(parts)
 
 
-def _variant(card, login, mode, size, filename):
+def _variant(card, login, mode, size, filename, glyph=True):
     url = f"https://github.com/itsrealkaran/nothing-github-contributions?username={login}&theme={mode}&size={size}"
+    if not glyph:
+        url += "&glyph=0"
+    shown = f"{mode} · {size}" if glyph else f"{mode} · {size} · glyph=0"
     return [
-        f"**{card}** · {mode} · {size}",
+        f"**{card}** · {shown}",
         "",
         f"`{url}`",
         "",
