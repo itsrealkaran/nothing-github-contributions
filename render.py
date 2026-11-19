@@ -5,7 +5,7 @@ from pathlib import Path
 
 from frame import dots, label, open_svg, week_glyphs
 from github_user import contributions
-from nothing import MODES, SIZES
+from nothing import MODES, SIZES, theme
 
 ROOT = Path(__file__).resolve().parent
 
@@ -21,7 +21,6 @@ def render(mode, size, data):
 
 
 def _colors(mode):
-    from nothing import theme
     return theme(mode)
 
 
