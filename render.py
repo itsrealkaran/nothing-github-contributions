@@ -11,6 +11,8 @@ ROOT = Path(__file__).resolve().parent
 
 
 def render(mode, size, data):
+    if size == "mini":
+        return _mini(mode, data)
     if size == "compact":
         return _compact(mode, data)
     if size == "wide":
@@ -21,6 +23,18 @@ def render(mode, size, data):
 def _colors(mode):
     from nothing import theme
     return theme(mode)
+
+
+def _mini(mode, data):
+    colors = _colors(mode)
+    name, _ = dots("CONTRIBUTIONS", 28, 12, colors["fg"], scale=1.15)
+    return "\n".join([
+        open_svg(mode, 220, 148, f"{data['login']} contributions", mark=6, margin=14),
+        name,
+        label(16, 108, f"{data['last_year']:,}", colors["figure"], 28, -0.8),
+        label(16, 130, "12 months", colors["muted"], 11, 0.3),
+        "</svg>",
+    ])
 
 
 def _compact(mode, data):
@@ -68,18 +82,30 @@ def _wide(mode, data):
     ])
 
 
+def _variant(card, login, mode, size, filename):
+    url = f"https://github.com/itsrealkaran/{card}?username={login}&theme={mode}&size={size}"
+    return [
+        f"**{card}** · {mode} · {size}",
+        "",
+        f"`{url}`",
+        "",
+        f"![{card} {mode} {size}](dist/{login}/{filename})",
+        "",
+    ]
+
+
 def main():
     login = sys.argv[1] if len(sys.argv) > 1 else "itsrealkaran"
     data = contributions(login)
     out = ROOT / "dist" / data["login"]
     out.mkdir(parents=True, exist_ok=True)
-    lines = [f"# {data['login']}", "", "Compact and regular are number widgets. Wide is the glyph widget.", ""]
+    lines = [f"# {data['login']}", "", "Mini is the short rectangle. Compact and regular are number widgets. Wide is the glyph widget.", ""]
     for mode in MODES:
         lines += [f"## {mode}", ""]
         for size in SIZES:
             filename = f"{mode}-{size}.svg"
             (out / filename).write_text(render(mode, size, data))
-            lines += [f"### {size}", "", f"![{mode} {size}](dist/{data['login']}/{filename})", ""]
+            lines += _variant("contributions", data["login"], mode, size, filename)
             print(data["login"], mode, size)
     (ROOT / "DUMMY.md").write_text("\n".join(lines) + "\n")
 
