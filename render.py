@@ -37,7 +37,7 @@ def _mini(mode, data):
     ]
     if portrait:
         count, _ = _figure(f"{data['last_year']:,}", 70, 22, colors["figure"], 2.6)
-        parts.append(_portrait(portrait, 14, 14, 46, colors))
+        parts.append(_portrait(portrait, 14, 14, 46, colors, mode))
         parts.append(count)
         parts.append(label(70, 62, "Last year", colors["muted"], 11, 0.3))
     else:
@@ -54,7 +54,7 @@ def _compact(mode, data):
     colors = _colors(mode)
     parts = [
         _open(mode, 495, 168, data),
-        *_who(data, colors, 495),
+        *_who(data, colors, 495, mode=mode),
         *_stats(data, colors, 495, 108, 132),
     ]
     return "\n".join(parts + ["</svg>"])
@@ -65,7 +65,7 @@ def _regular(mode, data):
     graph = _graph(data["days"], 20, 78, 53, 6, 2, colors)
     parts = [
         _open(mode, 495, 250, data),
-        *_who(data, colors, 495),
+        *_who(data, colors, 495, mode=mode),
         graph,
         *_year_line(data, colors, 20, 156),
         f'<line x1="20" y1="176" x2="475" y2="176" stroke="{colors["rule"]}"/>',
@@ -79,7 +79,7 @@ def _wide(mode, data):
     graph = _graph(data["days"], 20, 88, 53, 13, 3, colors)
     parts = [
         _open(mode, 896, 318, data),
-        *_who(data, colors, 896, total_size=28),
+        *_who(data, colors, 896, total_size=28, mode=mode),
         graph,
         *_year_line(data, colors, 20, 224),
         f'<line x1="20" y1="248" x2="876" y2="248" stroke="{colors["rule"]}"/>',
@@ -89,16 +89,21 @@ def _wide(mode, data):
     return "\n".join(parts + ["</svg>"])
 
 
+def _coloured(mode):
+    """Themes whose mark is an accent. classic-r keeps white figures and a red portrait."""
+    return mode.endswith("-r") or mode in ("light", "red", "blue", "yellow")
+
+
 def _open(mode, width, height, data):
     mark = 0 if data.get("glyph") else 8
     return open_svg(mode, width, height, f"{data['login']} contributions", mark=mark)
 
 
-def _who(data, colors, width, total_size=22):
+def _who(data, colors, width, total_size=22, mode="classic"):
     portrait = data.get("glyph") or []
     if portrait:
         head = [
-            _portrait(portrait, 18, 14, 48, colors),
+            _portrait(portrait, 18, 14, 48, colors, mode),
             label(78, 36, data["name"], colors["fg"], 16, 0),
             label(78, 56, f"@{data['login']}", colors["muted"], 12, 0.2),
         ]
@@ -114,10 +119,12 @@ def _who(data, colors, width, total_size=22):
     ]
 
 
-def _portrait(dots, x, y, size, colors):
+def _portrait(dots, x, y, size, colors, mode):
+    """Same split as the profile glyph. Colour themes replace the white ink."""
     step = size / 18
     radius = {1: step * 0.28, 2: step * 0.38, 3: step * 0.46}
-    fill = {1: colors["muted"], 2: colors["figure"], 3: colors["figure"]}
+    face = colors["mark"] if _coloured(mode) else colors["figure"]
+    fill = {1: colors["muted"], 2: face, 3: face}
     parts = []
     for col, row, kind in dots:
         parts.append(
