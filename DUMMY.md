@@ -210,6 +210,16 @@ The year is a grid. Under it: the last year, the longest streak, the current str
 
 ![contributions yellow wide](dist/itsrealkaran/yellow-wide.svg)
 
+## no glyph
+
+`glyph=0` hides the profile photo. `pfp=0` is the same parameter.
+
+**contributions** · classic · regular · glyph=0
+
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic&size=regular&glyph=0`
+
+![contributions classic regular glyph off](dist/itsrealkaran/classic-regular-glyph.svg)
+
 ## torvalds
 
 The profile photo is drawn as a glyph beside the name. `glyph=0` leaves the portrait off.
