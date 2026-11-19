@@ -4,7 +4,7 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from frame import label, open_svg
+from frame import dots, label, open_svg
 from github_user import contributions
 from nothing import MODES, SIZES, theme
 
@@ -31,21 +31,21 @@ def _mini(mode, data):
     portrait = data.get("glyph") or []
     parts = [
         open_svg(
-            mode, 220, 176, f"{data['login']} contributions",
+            mode, 220, 184, f"{data['login']} contributions",
             mark=0 if portrait else 6, margin=14,
         ),
     ]
     if portrait:
+        count, _ = _figure(f"{data['last_year']:,}", 70, 22, colors["figure"], 2.6)
         parts.append(_portrait(portrait, 14, 14, 46, colors))
-        parts.append(label(70, 34, f"{data['last_year']:,}", colors["figure"], 22, -0.6))
-        parts.append(label(70, 52, "Last year", colors["muted"], 11, 0.3))
+        parts.append(count)
+        parts.append(label(70, 62, "Last year", colors["muted"], 11, 0.3))
     else:
-        parts.append(label(28, 42, f"{data['last_year']:,}", colors["figure"], 26, -0.8))
-        parts.append(label(28, 62, "Last year", colors["muted"], 11, 0.3))
-    parts.append(_graph(data["days"], 16, 76, 53, 8, 2, colors, show=19))
-    span = _span(data["current"], "day")
-    parts.append(label(16, 160, span, colors["figure"], 13, 0))
-    parts.append(label(16 + len(span) * 8 + 8, 160, "Current", colors["muted"], 13, 0.15))
+        count, _ = _figure(f"{data['last_year']:,}", 28, 24, colors["figure"], 3)
+        parts.append(count)
+        parts.append(label(28, 68, "Last year", colors["muted"], 11, 0.3))
+    parts.append(_graph(data["days"], 16, 80, 53, 8, 2, colors, show=19))
+    parts.extend(_count(data["current"], "day", 16, 156, colors, 1.5, "Current"))
     parts.append("</svg>")
     return "\n".join(parts)
 
@@ -107,8 +107,9 @@ def _who(data, colors, width, total_size=22):
             label(40, 36, data["name"], colors["fg"], 16, 0),
             label(40, 56, f"@{data['login']}", colors["muted"], 12, 0.2),
         ]
+    scale = 3.4 if total_size >= 26 else 2.8
     return head + [
-        label(width - 20, 40, f"{data['all_time']:,}", colors["figure"], total_size, -0.6, anchor="end"),
+        _figure_end(f"{data['all_time']:,}", width - 20, 16, colors["figure"], scale),
         label(width - 20, 60, f"contributions since {data['year']}", colors["muted"], 12, 0.2, anchor="end"),
     ]
 
@@ -127,23 +128,32 @@ def _portrait(dots, x, y, size, colors):
 
 
 def _year_line(data, colors, x, y):
+    scale = 1.55
+    top = y - _figure_height(scale) + 2
+    drawn, visual = _figure(f"{data['last_year']:,}", x, top, colors["figure"], scale)
     return [
-        label(x, y, f"{data['last_year']:,}", colors["figure"], 13, 0),
-        label(x + len(f"{data['last_year']:,}") * 8 + 8, y, "contributions in the last year", colors["muted"], 13, 0.15),
+        drawn,
+        label(x + visual + 8, y, "contributions in the last year", colors["muted"], 13, 0.15),
     ]
 
 
 def _stats(data, colors, width, number_y, caption_y):
+    scale = 2.2
+    top = number_y - _figure_height(scale) + 2
     columns = (
-        (_span(data["longest"], "day"), "Longest streak"),
-        (_span(data["current"], "day"), "Current streak"),
-        (f"{data['stars']:,}", "Stars"),
+        (data["longest"], "day", "Longest streak"),
+        (data["current"], "day", "Current streak"),
+        (data["stars"], "", "Stars"),
     )
     span = width / 3
     parts = []
-    for index, (number, caption) in enumerate(columns):
+    for index, (count, unit, caption) in enumerate(columns):
         x = 20 if index == 0 else span * index
-        parts.append(label(x, number_y, number, colors["figure"], 18, -0.4))
+        drawn, visual = _figure(f"{count:,}", x, top, colors["figure"], scale)
+        parts.append(drawn)
+        if unit:
+            word = unit if count == 1 else f"{unit}s"
+            parts.append(label(x + visual + 6, _unit_line(top, scale, 14), word, colors["figure"], 14, 0.1))
         parts.append(label(x, caption_y, caption, colors["muted"], 12, 0.2))
     return parts
 
@@ -156,9 +166,37 @@ def _languages(data, colors, x, y):
     return label(x, y, text, colors["muted"], 12, 0.15, anchor="end")
 
 
-def _span(count, word):
-    unit = word if count == 1 else f"{word}s"
-    return f"{count:,} {unit}"
+def _figure_height(scale):
+    return 6 * (scale + 1.1) + scale
+
+
+def _unit_line(top, scale, size):
+    """Baseline that sits a unit on the same line as a dot-grid figure."""
+    return top + _figure_height(scale) / 2 + size * 0.32
+
+
+def _figure(text, x, y, fill, scale):
+    drawn, width = dots(text, x, y, fill, scale=scale)
+    return drawn, width - (scale + 1.1)
+
+
+def _figure_end(text, right, y, fill, scale):
+    _drawn, visual = _figure(text, 0, y, fill, scale)
+    drawn, _visual = _figure(text, right - visual, y, fill, scale)
+    return drawn
+
+
+def _count(count, unit, x, y, colors, scale, caption):
+    """A dot-grid count, its unit, and a muted caption on one line."""
+    drawn, visual = _figure(f"{count:,}", x, y, colors["figure"], scale)
+    word = unit if count == 1 else f"{unit}s"
+    baseline = _unit_line(y, scale, 13)
+    word_x = x + visual + 6
+    return [
+        drawn,
+        label(word_x, baseline, word, colors["figure"], 13, 0.1),
+        label(word_x + len(word) * 8 + 10, baseline, caption, colors["muted"], 13, 0.15),
+    ]
 
 
 # A day lights squares in reading order: one, the top pair, an L, then the block.
