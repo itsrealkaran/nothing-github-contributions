@@ -148,6 +148,10 @@ def _portrait(dots, x, y, size, colors, mode):
             f'r="{radius[kind]:.2f}" fill="{fill[kind]}"/>'
         )
     parts.append("</g>")
+    parts.append(
+        f'<circle cx="{cx0:.2f}" cy="{cy0:.2f}" r="{size / 2:.2f}" fill="none" '
+        f'stroke="{contour}" stroke-width="0.75"/>'
+    )
     return "".join(parts)
 
 
