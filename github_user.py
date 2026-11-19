@@ -81,7 +81,11 @@ def viewer():
 def profile(login):
     user = _gh([f"users/{login}"])
     created = datetime.fromisoformat(user["created_at"].replace("Z", "+00:00"))
-    return {"login": user["login"], "created": created}
+    return {
+        "login": user["login"],
+        "name": user.get("name") or user["login"],
+        "created": created,
+    }
 
 
 def owned_repos(login):
@@ -155,15 +159,63 @@ def contributions(login):
         all_days.extend(days)
     repos, own = owned_repos(login)
     stars = sum(repo.get("stargazers_count", 0) for repo in repos)
+    current, longest = _streaks(all_days)
     return {
         "login": info["login"],
+        "name": info["name"],
         "last_year": last_year,
         "all_time": all_time,
         "stars": stars,
         "stars_label": "stars on owned repos" if own else "stars on public repos",
         "since": info["created"].strftime("%b %Y"),
+        "year": info["created"].year,
+        "current": current,
+        "longest": longest,
+        "languages": _top_public(repos),
         "days": all_days,
     }
+
+
+def _streaks(days):
+    parsed = [(datetime.strptime(day, "%Y-%m-%d").date(), count) for day, count in days]
+    parsed.sort()
+    longest = run = 0
+    previous = None
+    for day, count in parsed:
+        if count <= 0:
+            run = 0
+            previous = day
+            continue
+        run = run + 1 if previous == day - timedelta(days=1) and run else 1
+        longest = max(longest, run)
+        previous = day
+    today = datetime.now(timezone.utc).date()
+    by_day = dict(parsed)
+    cursor = today if by_day.get(today, 0) else today - timedelta(days=1)
+    current = 0
+    while by_day.get(cursor, 0) > 0:
+        current += 1
+        cursor -= timedelta(days=1)
+    return current, longest
+
+
+def _top_public(repos):
+    """Top languages on public repositories. A private-only language is left out."""
+    totals = Counter()
+    for repo in repos:
+        if repo.get("private") or repo.get("fork"):
+            continue
+        totals.update(_gh([f"repos/{repo['full_name']}/languages"]))
+    grand = sum(totals.values()) or 1
+    rows = []
+    for name, amount in totals.most_common():
+        share = round(100 * amount / grand)
+        if share <= 0:
+            continue
+        rows.append((name, share))
+        if len(rows) == 3:
+            break
+    return rows
 
 
 def streak(login):
