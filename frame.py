@@ -17,8 +17,10 @@ def dots(text, x, y, fill, scale=2.4, weight=1):
                 if bit == "1":
                     cx = cursor + col * step + scale / 2
                     cy = y + row * step + scale / 2
+                    side = radius * 2
                     parts.append(
-                        f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{radius:.2f}" fill="{fill}"/>'
+                        f'<rect x="{cx - radius:.2f}" y="{cy - radius:.2f}" '
+                        f'width="{side:.2f}" height="{side:.2f}" fill="{fill}"/>'
                     )
         cursor += 3 * step if char == "," else 5 * step + scale
     return "".join(parts), cursor - x
