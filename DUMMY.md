@@ -1,6 +1,6 @@
 # itsrealkaran
 
-Mini is the short rectangle. Compact and regular are number widgets. Wide is the glyph widget.
+The year is a grid. Under it: the last year, the longest streak, the current streak, and stars.
 
 ## classic
 
