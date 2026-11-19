@@ -23,11 +23,11 @@ An SVG for a GitHub profile. Place the URL in a README, on a site, or anywhere a
 ## Usage
 
 ```text
-https://<host>/contributions?username=itsrealkaran
+https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran
 ```
 
 ```md
-![contributions](https://<host>/contributions?username=itsrealkaran)
+![contributions](https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran)
 ```
 
 Leave `theme` and `size` off for the classic regular card. An unknown username, theme, or size still returns an SVG, so the image slot in a README stays intact.
@@ -71,19 +71,19 @@ The files in `dist/` use the theme name, then the size: `classic-regular.svg`.
 
 ## Examples
 
-Previews use `itsrealkaran`. Replace `<host>` with your server.
+Previews use `itsrealkaran`.
 
 ### classic
 
 #### mini
 
-`https://<host>/contributions?username=itsrealkaran&theme=classic&size=mini`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic&size=mini`
 
 ![contributions classic mini](dist/itsrealkaran/classic-mini.svg)
 
 #### compact
 
-`https://<host>/contributions?username=itsrealkaran&theme=classic&size=compact`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic&size=compact`
 
 ![contributions classic compact](dist/itsrealkaran/classic-compact.svg)
 
@@ -91,13 +91,13 @@ Previews use `itsrealkaran`. Replace `<host>` with your server.
 
 This is the default. You can leave `theme` and `size` off and get this card.
 
-`https://<host>/contributions?username=itsrealkaran&theme=classic&size=regular`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic&size=regular`
 
 ![contributions classic regular](dist/itsrealkaran/classic-regular.svg)
 
 #### wide
 
-`https://<host>/contributions?username=itsrealkaran&theme=classic&size=wide`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic&size=wide`
 
 ![contributions classic wide](dist/itsrealkaran/classic-wide.svg)
 
@@ -105,25 +105,25 @@ This is the default. You can leave `theme` and `size` off and get this card.
 
 #### mini
 
-`https://<host>/contributions?username=itsrealkaran&theme=classic-r&size=mini`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic-r&size=mini`
 
 ![contributions classic-r mini](dist/itsrealkaran/classic-r-mini.svg)
 
 #### compact
 
-`https://<host>/contributions?username=itsrealkaran&theme=classic-r&size=compact`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic-r&size=compact`
 
 ![contributions classic-r compact](dist/itsrealkaran/classic-r-compact.svg)
 
 #### regular
 
-`https://<host>/contributions?username=itsrealkaran&theme=classic-r&size=regular`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic-r&size=regular`
 
 ![contributions classic-r regular](dist/itsrealkaran/classic-r-regular.svg)
 
 #### wide
 
-`https://<host>/contributions?username=itsrealkaran&theme=classic-r&size=wide`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic-r&size=wide`
 
 ![contributions classic-r wide](dist/itsrealkaran/classic-r-wide.svg)
 
@@ -131,25 +131,25 @@ This is the default. You can leave `theme` and `size` off and get this card.
 
 #### mini
 
-`https://<host>/contributions?username=itsrealkaran&theme=white&size=mini`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=white&size=mini`
 
 ![contributions white mini](dist/itsrealkaran/white-mini.svg)
 
 #### compact
 
-`https://<host>/contributions?username=itsrealkaran&theme=white&size=compact`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=white&size=compact`
 
 ![contributions white compact](dist/itsrealkaran/white-compact.svg)
 
 #### regular
 
-`https://<host>/contributions?username=itsrealkaran&theme=white&size=regular`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=white&size=regular`
 
 ![contributions white regular](dist/itsrealkaran/white-regular.svg)
 
 #### wide
 
-`https://<host>/contributions?username=itsrealkaran&theme=white&size=wide`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=white&size=wide`
 
 ![contributions white wide](dist/itsrealkaran/white-wide.svg)
 
@@ -157,25 +157,25 @@ This is the default. You can leave `theme` and `size` off and get this card.
 
 #### mini
 
-`https://<host>/contributions?username=itsrealkaran&theme=white-r&size=mini`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=white-r&size=mini`
 
 ![contributions white-r mini](dist/itsrealkaran/white-r-mini.svg)
 
 #### compact
 
-`https://<host>/contributions?username=itsrealkaran&theme=white-r&size=compact`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=white-r&size=compact`
 
 ![contributions white-r compact](dist/itsrealkaran/white-r-compact.svg)
 
 #### regular
 
-`https://<host>/contributions?username=itsrealkaran&theme=white-r&size=regular`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=white-r&size=regular`
 
 ![contributions white-r regular](dist/itsrealkaran/white-r-regular.svg)
 
 #### wide
 
-`https://<host>/contributions?username=itsrealkaran&theme=white-r&size=wide`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=white-r&size=wide`
 
 ![contributions white-r wide](dist/itsrealkaran/white-r-wide.svg)
 
@@ -183,25 +183,25 @@ This is the default. You can leave `theme` and `size` off and get this card.
 
 #### mini
 
-`https://<host>/contributions?username=itsrealkaran&theme=light&size=mini`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=light&size=mini`
 
 ![contributions light mini](dist/itsrealkaran/light-mini.svg)
 
 #### compact
 
-`https://<host>/contributions?username=itsrealkaran&theme=light&size=compact`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=light&size=compact`
 
 ![contributions light compact](dist/itsrealkaran/light-compact.svg)
 
 #### regular
 
-`https://<host>/contributions?username=itsrealkaran&theme=light&size=regular`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=light&size=regular`
 
 ![contributions light regular](dist/itsrealkaran/light-regular.svg)
 
 #### wide
 
-`https://<host>/contributions?username=itsrealkaran&theme=light&size=wide`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=light&size=wide`
 
 ![contributions light wide](dist/itsrealkaran/light-wide.svg)
 
@@ -209,25 +209,25 @@ This is the default. You can leave `theme` and `size` off and get this card.
 
 #### mini
 
-`https://<host>/contributions?username=itsrealkaran&theme=red&size=mini`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=red&size=mini`
 
 ![contributions red mini](dist/itsrealkaran/red-mini.svg)
 
 #### compact
 
-`https://<host>/contributions?username=itsrealkaran&theme=red&size=compact`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=red&size=compact`
 
 ![contributions red compact](dist/itsrealkaran/red-compact.svg)
 
 #### regular
 
-`https://<host>/contributions?username=itsrealkaran&theme=red&size=regular`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=red&size=regular`
 
 ![contributions red regular](dist/itsrealkaran/red-regular.svg)
 
 #### wide
 
-`https://<host>/contributions?username=itsrealkaran&theme=red&size=wide`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=red&size=wide`
 
 ![contributions red wide](dist/itsrealkaran/red-wide.svg)
 
@@ -235,25 +235,25 @@ This is the default. You can leave `theme` and `size` off and get this card.
 
 #### mini
 
-`https://<host>/contributions?username=itsrealkaran&theme=blue&size=mini`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=blue&size=mini`
 
 ![contributions blue mini](dist/itsrealkaran/blue-mini.svg)
 
 #### compact
 
-`https://<host>/contributions?username=itsrealkaran&theme=blue&size=compact`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=blue&size=compact`
 
 ![contributions blue compact](dist/itsrealkaran/blue-compact.svg)
 
 #### regular
 
-`https://<host>/contributions?username=itsrealkaran&theme=blue&size=regular`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=blue&size=regular`
 
 ![contributions blue regular](dist/itsrealkaran/blue-regular.svg)
 
 #### wide
 
-`https://<host>/contributions?username=itsrealkaran&theme=blue&size=wide`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=blue&size=wide`
 
 ![contributions blue wide](dist/itsrealkaran/blue-wide.svg)
 
@@ -261,25 +261,25 @@ This is the default. You can leave `theme` and `size` off and get this card.
 
 #### mini
 
-`https://<host>/contributions?username=itsrealkaran&theme=yellow&size=mini`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=yellow&size=mini`
 
 ![contributions yellow mini](dist/itsrealkaran/yellow-mini.svg)
 
 #### compact
 
-`https://<host>/contributions?username=itsrealkaran&theme=yellow&size=compact`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=yellow&size=compact`
 
 ![contributions yellow compact](dist/itsrealkaran/yellow-compact.svg)
 
 #### regular
 
-`https://<host>/contributions?username=itsrealkaran&theme=yellow&size=regular`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=yellow&size=regular`
 
 ![contributions yellow regular](dist/itsrealkaran/yellow-regular.svg)
 
 #### wide
 
-`https://<host>/contributions?username=itsrealkaran&theme=yellow&size=wide`
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=yellow&size=wide`
 
 ![contributions yellow wide](dist/itsrealkaran/yellow-wide.svg)
 
@@ -331,9 +331,9 @@ Fork this repo for your own host. Your copy stays awake if a shared deploy sleep
 1. Fork the repo.
 2. Deploy the Dockerfile on Fly, Railway, Render, Cloud Run, or a virtual machine. Or deploy `server.js` on Vercel or Netlify.
 3. Set the variables below as secrets. Do not commit them.
-4. Open `https://<your-host>/contributions?username=yourname`.
+4. Open `https://github.com/itsrealkaran/nothing-github-contributions?username=yourname`.
 
-Use that host in the image URL. The path and the query stay the same.
+Use that address in the image URL. The query stays the same.
 
 ## Configuration
 
