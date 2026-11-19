@@ -37,7 +37,7 @@ def _mini(mode, data):
     ]
     name_x = 60 if portrait else 28
     if portrait:
-        parts.append(_portrait(portrait, 14, 12, 40, colors, mode))
+        parts.append(_portrait(portrait, 14, 12, 40, colors))
     parts.append(label(name_x, 28, data["name"], colors["fg"], 13, 0))
     parts.append(label(name_x, 46, f"@{data['login']}", colors["muted"], 11, 0.2))
     scale = 2.2
@@ -48,7 +48,9 @@ def _mini(mode, data):
         16 + visual + 8, top + _figure_height(scale) - 2,
         "Last year", colors["muted"], 11, 0.2,
     ))
-    parts.append(_graph(data["days"], 16, 98, 53, 8, 2, colors, show=19))
+    if mode.endswith("-r"):
+        parts.append(f'<rect x="200" y="14" width="6" height="6" fill="{colors["mark"]}"/>')
+    parts.append(_graph(data["days"], 16, 98, 53, 8, 2, colors, show=19, accent=_accent(mode, colors)))
     parts.append("</svg>")
     return "\n".join(parts)
 
@@ -57,7 +59,8 @@ def _compact(mode, data):
     colors = _colors(mode)
     parts = [
         _open(mode, 495, 168, data),
-        *_who(data, colors, 495, mode=mode),
+        *_who(data, colors, 495),
+        *([_rule(20, 475, 76, colors, mode)] if mode.endswith("-r") else []),
         *_stats(data, colors, 495, 108, 132),
     ]
     return "\n".join(parts + ["</svg>"])
@@ -65,13 +68,13 @@ def _compact(mode, data):
 
 def _regular(mode, data):
     colors = _colors(mode)
-    graph = _graph(data["days"], 20, 78, 53, 6, 2, colors)
+    graph = _graph(data["days"], 20, 78, 53, 6, 2, colors, accent=_accent(mode, colors))
     parts = [
         _open(mode, 495, 250, data),
-        *_who(data, colors, 495, mode=mode),
+        *_who(data, colors, 495),
         graph,
         *_year_line(data, colors, 20, 156),
-        f'<line x1="20" y1="176" x2="475" y2="176" stroke="{colors["rule"]}"/>',
+        _rule(20, 475, 176, colors, mode),
         *_stats(data, colors, 495, 206, 228),
     ]
     return "\n".join(parts + ["</svg>"])
@@ -79,22 +82,27 @@ def _regular(mode, data):
 
 def _wide(mode, data):
     colors = _colors(mode)
-    graph = _graph(data["days"], 20, 88, 53, 13, 3, colors)
+    graph = _graph(data["days"], 20, 88, 53, 13, 3, colors, accent=_accent(mode, colors))
     parts = [
         _open(mode, 896, 318, data),
-        *_who(data, colors, 896, total_size=28, mode=mode),
+        *_who(data, colors, 896, total_size=28),
         graph,
         *_year_line(data, colors, 20, 224),
-        f'<line x1="20" y1="248" x2="876" y2="248" stroke="{colors["rule"]}"/>',
+        _rule(20, 876, 248, colors, mode),
         *_stats(data, colors, 896, 278, 300),
         _languages(data, colors, 876, 224),
     ]
     return "\n".join(parts + ["</svg>"])
 
 
-def _coloured(mode):
-    """Themes whose mark is an accent. classic-r keeps white figures and a red portrait."""
-    return mode.endswith("-r") or mode in ("light", "red", "blue", "yellow")
+def _accent(mode, colors):
+    """N-Red on the -r cards, kept off the portrait."""
+    return colors["mark"] if mode.endswith("-r") else None
+
+
+def _rule(x1, x2, y, colors, mode):
+    stroke = colors["mark"] if mode.endswith("-r") else colors["rule"]
+    return f'<line x1="{x1}" y1="{y}" x2="{x2}" y2="{y}" stroke="{stroke}"/>'
 
 
 def _open(mode, width, height, data):
@@ -102,11 +110,11 @@ def _open(mode, width, height, data):
     return open_svg(mode, width, height, f"{data['login']} contributions", mark=mark)
 
 
-def _who(data, colors, width, total_size=22, mode="classic"):
+def _who(data, colors, width, total_size=22):
     portrait = data.get("glyph") or []
     if portrait:
         head = [
-            _portrait(portrait, 18, 14, 48, colors, mode),
+            _portrait(portrait, 18, 14, 48, colors),
             label(78, 36, data["name"], colors["fg"], 16, 0),
             label(78, 56, f"@{data['login']}", colors["muted"], 12, 0.2),
         ]
@@ -122,12 +130,11 @@ def _who(data, colors, width, total_size=22, mode="classic"):
     ]
 
 
-def _portrait(dots, x, y, size, colors, mode):
-    """Same split as the profile glyph. Colour themes replace the white ink."""
+def _portrait(dots, x, y, size, colors):
+    """Same split as the profile glyph. The face uses the figure colour."""
     step = size / 18
     radius = {1: step * 0.28, 2: step * 0.38, 3: step * 0.46}
-    face = colors["mark"] if _coloured(mode) else colors["figure"]
-    fill = {1: colors["muted"], 2: face, 3: face}
+    fill = {1: colors["muted"], 2: colors["figure"], 3: colors["figure"]}
     parts = []
     for col, row, kind in dots:
         parts.append(
@@ -218,7 +225,7 @@ def _count(count, x, y, colors, scale, caption):
 
 
 # A day lights squares in reading order: one, the top pair, an L, then the block.
-def _graph(days, x, y, weeks, cell, gap, colors, show=None):
+def _graph(days, x, y, weeks, cell, gap, colors, show=None, accent=None):
     by_day = {}
     for day, count in days:
         by_day[datetime.strptime(day, "%Y-%m-%d").date()] = count
@@ -258,8 +265,13 @@ def _graph(days, x, y, weeks, cell, gap, colors, show=None):
         if week < origin:
             continue
         rank = level(count)
-        fill = colors["rule"] if rank == 0 else colors["figure"]
-        extra = f' opacity="{opacity[rank]}"' if rank in opacity else ""
+        if rank == 4 and accent:
+            fill, extra = accent, ""
+        elif rank == 0:
+            fill, extra = colors["rule"], ""
+        else:
+            fill = colors["figure"]
+            extra = f' opacity="{opacity[rank]}"' if rank in opacity else ""
         parts.append(
             f'<rect x="{x + (week - origin) * step}" y="{y + row * step}" width="{cell}" height="{cell}" '
             f'fill="{fill}"{extra}/>'
