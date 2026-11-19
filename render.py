@@ -31,7 +31,7 @@ def _mini(mode, data):
     portrait = data.get("glyph") or []
     parts = [
         open_svg(
-            mode, 220, 204, f"{data['login']} contributions",
+            mode, 220, 182, f"{data['login']} contributions",
             mark=0 if portrait else 6, margin=14,
         ),
     ]
@@ -49,7 +49,6 @@ def _mini(mode, data):
         "Last year", colors["muted"], 11, 0.2,
     ))
     parts.append(_graph(data["days"], 16, 98, 53, 8, 2, colors, show=19))
-    parts.extend(_count(data["current"], 16, 176, colors, 1.5, "Current"))
     parts.append("</svg>")
     return "\n".join(parts)
 
