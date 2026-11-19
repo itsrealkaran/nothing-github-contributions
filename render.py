@@ -45,7 +45,7 @@ def _mini(mode, data):
         parts.append(count)
         parts.append(label(28, 68, "Last year", colors["muted"], 11, 0.3))
     parts.append(_graph(data["days"], 16, 80, 53, 8, 2, colors, show=19))
-    parts.extend(_count(data["current"], "day", 16, 156, colors, 1.5, "Current"))
+    parts.extend(_count(data["current"], 16, 156, colors, 1.5, "Current"))
     parts.append("</svg>")
     return "\n".join(parts)
 
@@ -152,8 +152,8 @@ def _stats(data, colors, width, number_y, caption_y):
         drawn, visual = _figure(f"{count:,}", x, top, colors["figure"], scale)
         parts.append(drawn)
         if unit:
-            word = unit if count == 1 else f"{unit}s"
-            parts.append(label(x + visual + 6, _unit_line(top, scale, 14), word, colors["figure"], 14, 0.1))
+            word = "DAY" if count == 1 else "DAYS"
+            parts.append(_figure(word, x + visual + 8, top, colors["muted"], scale, weight=0.85)[0])
         parts.append(label(x, caption_y, caption, colors["muted"], 12, 0.2))
     return parts
 
@@ -175,8 +175,8 @@ def _unit_line(top, scale, size):
     return top + _figure_height(scale) / 2 + size * 0.32
 
 
-def _figure(text, x, y, fill, scale):
-    drawn, width = dots(text, x, y, fill, scale=scale)
+def _figure(text, x, y, fill, scale, weight=1.4):
+    drawn, width = dots(text, x, y, fill, scale=scale, weight=weight)
     return drawn, width - (scale + 1.1)
 
 
@@ -186,16 +186,16 @@ def _figure_end(text, right, y, fill, scale):
     return drawn
 
 
-def _count(count, unit, x, y, colors, scale, caption):
-    """A dot-grid count, its unit, and a muted caption on one line."""
+def _count(count, x, y, colors, scale, caption):
+    """A dot-grid count, the unit in a lighter grid, then the caption."""
     drawn, visual = _figure(f"{count:,}", x, y, colors["figure"], scale)
-    word = unit if count == 1 else f"{unit}s"
-    baseline = _unit_line(y, scale, 13)
-    word_x = x + visual + 6
+    word = "DAY" if count == 1 else "DAYS"
+    word_x = x + visual + 8
+    unit_drawn, unit_visual = _figure(word, word_x, y, colors["muted"], scale, weight=0.85)
     return [
         drawn,
-        label(word_x, baseline, word, colors["figure"], 13, 0.1),
-        label(word_x + len(word) * 8 + 10, baseline, caption, colors["muted"], 13, 0.15),
+        unit_drawn,
+        label(word_x + unit_visual + 10, _unit_line(y, scale, 13), caption, colors["muted"], 13, 0.15),
     ]
 
 

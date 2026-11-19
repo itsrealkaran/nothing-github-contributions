@@ -5,8 +5,9 @@ from datetime import datetime, timedelta, timezone
 from nothing import GLYPHS, theme
 
 
-def dots(text, x, y, fill, scale=2.4):
+def dots(text, x, y, fill, scale=2.4, weight=1):
     step = scale + 1.1
+    radius = min(scale / 2 * weight, step * 0.46)
     parts = []
     cursor = x
     for char in text:
@@ -17,7 +18,7 @@ def dots(text, x, y, fill, scale=2.4):
                     cx = cursor + col * step + scale / 2
                     cy = y + row * step + scale / 2
                     parts.append(
-                        f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{scale / 2:.2f}" fill="{fill}"/>'
+                        f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{radius:.2f}" fill="{fill}"/>'
                     )
         cursor += 3 * step if char == "," else 5 * step + scale
     return "".join(parts), cursor - x
@@ -66,6 +67,6 @@ def xml(text):
 def label(x, y, text, fill, size=13, tracking=0.4, anchor="start"):
     return (
         f'<text x="{x}" y="{y}" fill="{fill}" text-anchor="{anchor}" '
-        f'font-family="ui-monospace, Geist Mono, monospace" '
+        f'font-family="ui-monospace, Geist Mono, monospace" font-weight="700" '
         f'font-size="{size}" letter-spacing="{tracking}" dominant-baseline="auto">{xml(text)}</text>'
     )
