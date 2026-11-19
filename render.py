@@ -131,13 +131,9 @@ def _who(data, colors, width, mode, total_size=22):
 
 
 def _portrait(dots, x, y, size, colors, mode):
-    """A circular crop. The face uses the figure colour."""
-    buckets = {}
-    for col, row, kind in dots:
-        key = (col // 2, row // 2)
-        buckets[key] = max(buckets.get(key, 0), kind)
-    step = size / 9
-    radius = {1: step * 0.42, 2: step * 0.46, 3: step * 0.50}
+    """The original glyph, clipped to a circle. The face uses the figure colour."""
+    step = size / 18
+    radius = {1: step * 0.28, 2: step * 0.38, 3: step * 0.46}
     contour = colors["figure"] if mode in ("red", "blue", "yellow") else colors["muted"]
     fill = {1: contour, 2: colors["figure"], 3: colors["figure"]}
     cx0 = x + size / 2
@@ -146,7 +142,7 @@ def _portrait(dots, x, y, size, colors, mode):
         f'<clipPath id="pfp"><circle cx="{cx0:.2f}" cy="{cy0:.2f}" r="{size / 2:.2f}"/></clipPath>',
         '<g clip-path="url(#pfp)">',
     ]
-    for (col, row), kind in buckets.items():
+    for col, row, kind in dots:
         parts.append(
             f'<circle cx="{x + (col + 0.5) * step:.2f}" cy="{y + (row + 0.5) * step:.2f}" '
             f'r="{radius[kind]:.2f}" fill="{fill[kind]}"/>'
