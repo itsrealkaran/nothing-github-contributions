@@ -26,26 +26,30 @@ def _colors(mode):
 
 
 def _mini(mode, data):
-    """Glyph and the last year, then the recent weeks at a size you can read."""
+    """Portrait and name, the last year, then the recent weeks."""
     colors = _colors(mode)
     portrait = data.get("glyph") or []
     parts = [
         open_svg(
-            mode, 220, 184, f"{data['login']} contributions",
+            mode, 220, 204, f"{data['login']} contributions",
             mark=0 if portrait else 6, margin=14,
         ),
     ]
+    name_x = 60 if portrait else 28
     if portrait:
-        count, _ = _figure(f"{data['last_year']:,}", 70, 22, colors["figure"], 2.6)
-        parts.append(_portrait(portrait, 14, 14, 46, colors, mode))
-        parts.append(count)
-        parts.append(label(70, 62, "Last year", colors["muted"], 11, 0.3))
-    else:
-        count, _ = _figure(f"{data['last_year']:,}", 28, 24, colors["figure"], 3)
-        parts.append(count)
-        parts.append(label(28, 68, "Last year", colors["muted"], 11, 0.3))
-    parts.append(_graph(data["days"], 16, 80, 53, 8, 2, colors, show=19))
-    parts.extend(_count(data["current"], 16, 156, colors, 1.5, "Current"))
+        parts.append(_portrait(portrait, 14, 12, 40, colors, mode))
+    parts.append(label(name_x, 28, data["name"], colors["fg"], 13, 0))
+    parts.append(label(name_x, 46, f"@{data['login']}", colors["muted"], 11, 0.2))
+    scale = 2.2
+    top = 62
+    drawn, visual = _figure(f"{data['last_year']:,}", 16, top, colors["figure"], scale)
+    parts.append(drawn)
+    parts.append(label(
+        16 + visual + 8, top + _figure_height(scale) - 2,
+        "Last year", colors["muted"], 11, 0.2,
+    ))
+    parts.append(_graph(data["days"], 16, 98, 53, 8, 2, colors, show=19))
+    parts.extend(_count(data["current"], 16, 176, colors, 1.5, "Current"))
     parts.append("</svg>")
     return "\n".join(parts)
 
@@ -160,7 +164,7 @@ def _stats(data, colors, width, number_y, caption_y):
         parts.append(drawn)
         if unit:
             word = "DAY" if count == 1 else "DAYS"
-            parts.append(_figure(word, x + visual + 8, top, colors["muted"], scale, weight=0.85)[0])
+            parts.append(_unit(word, x + visual + 8, top, scale, colors["muted"]))
         parts.append(label(x, caption_y, caption, colors["muted"], 12, 0.2))
     return parts
 
@@ -182,6 +186,14 @@ def _unit_line(top, scale, size):
     return top + _figure_height(scale) / 2 + size * 0.32
 
 
+def _unit(word, x, number_top, number_scale, fill, measure=False):
+    """A lighter day word, smaller than the count and sitting on its baseline."""
+    scale = max(1.05, round(number_scale * 0.62, 2))
+    top = number_top + _figure_height(number_scale) - _figure_height(scale)
+    drawn, visual = _figure(word, x, top, fill, scale, weight=0.85)
+    return (drawn, visual) if measure else drawn
+
+
 def _figure(text, x, y, fill, scale, weight=1.4):
     drawn, width = dots(text, x, y, fill, scale=scale, weight=weight)
     return drawn, width - (scale + 1.1)
@@ -198,7 +210,7 @@ def _count(count, x, y, colors, scale, caption):
     drawn, visual = _figure(f"{count:,}", x, y, colors["figure"], scale)
     word = "DAY" if count == 1 else "DAYS"
     word_x = x + visual + 8
-    unit_drawn, unit_visual = _figure(word, word_x, y, colors["muted"], scale, weight=0.85)
+    unit_drawn, unit_visual = _unit(word, word_x, y, scale, colors["muted"], measure=True)
     return [
         drawn,
         unit_drawn,
