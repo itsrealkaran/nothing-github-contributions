@@ -210,3 +210,12 @@ The year is a field of equal squares. A day lights one more square at each step.
 
 ![contributions yellow wide](dist/itsrealkaran/yellow-wide.svg)
 
+## torvalds
+
+The profile photo is drawn as a glyph beside the name. `glyph=0` leaves the portrait off.
+
+**contributions** · classic · wide
+
+`https://github.com/itsrealkaran/contributions?username=torvalds&theme=classic&size=wide`
+
+![contributions classic wide](dist/torvalds/classic-wide.svg)
