@@ -13,12 +13,12 @@ function render(mode, size, data) {
 
 function mini(mode, data) {
   const colors = theme(mode);
-  const portrait = data.glyph || [];
+  const portrait = shown(data);
   const parts = [
-    openSvg(mode, 220, 182, data.login + " contributions", portrait.length ? 0 : 6, 14),
+    openSvg(mode, 220, 182, data.login + " contributions", portrait ? 0 : 6, 14),
   ];
-  const nameX = portrait.length ? 60 : 28;
-  if (portrait.length) parts.push(portraitMark(portrait, 14, 12, 40, colors, mode));
+  const nameX = portrait ? 60 : 28;
+  if (portrait) parts.push(place(data, 14, 12, 40, colors, mode));
   parts.push(label(nameX, 28, data.name, colors.fg, 13, 0));
   parts.push(label(nameX, 46, "@" + data.login, colors.muted, 11, 0.2));
   const scale = 2.2;
@@ -90,15 +90,14 @@ function rule(x1, x2, y, colors, mode) {
 }
 
 function open(mode, width, height, data) {
-  const mark = data.glyph && data.glyph.length ? 0 : 8;
+  const mark = shown(data) ? 0 : 8;
   return openSvg(mode, width, height, data.login + " contributions", mark);
 }
 
 function who(data, colors, width, mode, totalSize = 22) {
-  const portrait = data.glyph || [];
-  const head = portrait.length
+  const head = shown(data)
     ? [
-      portraitMark(portrait, 18, 14, 48, colors, mode),
+      place(data, 18, 14, 48, colors, mode),
       label(78, 36, data.name, colors.fg, 16, 0),
       label(78, 56, "@" + data.login, colors.muted, 12, 0.2),
     ]
@@ -111,6 +110,29 @@ function who(data, colors, width, mode, totalSize = 22) {
     figureEnd(commas(data.all_time), width - 20, 16, colors.figure, scale),
     label(width - 20, 60, "contributions since " + data.year, colors.muted, 12, 0.2, "end"),
   ]);
+}
+
+function shown(data) {
+  return Boolean((data.glyph && data.glyph.length) || data.photo);
+}
+
+function place(data, x, y, size, colors, mode) {
+  if (data.photo) return photoMark(data.photo, x, y, size, colors, mode);
+  return portraitMark(data.glyph || [], x, y, size, colors, mode);
+}
+
+function photoMark(href, x, y, size, colors, mode) {
+  const cx0 = x + size / 2;
+  const cy0 = y + size / 2;
+  const contour = mode === "red" || mode === "blue" || mode === "yellow" ? colors.figure : colors.muted;
+  const ring = mode.endsWith("-r") ? colors.mark : contour;
+  return (
+    `<clipPath id="pfp"><circle cx="${fixed(cx0, 2)}" cy="${fixed(cy0, 2)}" r="${fixed(size / 2, 2)}"/></clipPath>` +
+    `<image href="${href}" x="${x}" y="${y}" width="${size}" height="${size}" ` +
+    `clip-path="url(#pfp)" preserveAspectRatio="xMidYMid slice"/>` +
+    `<circle cx="${fixed(cx0, 2)}" cy="${fixed(cy0, 2)}" r="${fixed(size / 2, 2)}" fill="none" ` +
+    `stroke="${ring}" stroke-width="0.75"/>`
+  );
 }
 
 function portraitMark(cells, x, y, size, colors, mode) {

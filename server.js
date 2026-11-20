@@ -29,13 +29,18 @@ function errorSvg(message) {
   );
 }
 
+function on(url, name) {
+  const flag = (url.searchParams.get(name) || "1").trim().toLowerCase();
+  return ["0", "no", "off", "false"].includes(flag) ? "0" : "1";
+}
+
 function loginOk(value) {
   if (!value || value.length > 39 || !/^[A-Za-z0-9]/.test(value)) return false;
   return /^[A-Za-z0-9-]+$/.test(value);
 }
 
-async function draw(login, theme, size, glyph) {
-  const data = await load(login, glyph === "1");
+async function draw(login, theme, size, glyph, pfp) {
+  const data = await load(login, { glyph: glyph === "1", pfp: pfp === "1" });
   return render(theme, size, data);
 }
 
@@ -73,8 +78,8 @@ async function handle(req, res) {
   }
   const theme = (url.searchParams.get("theme") || "classic").trim() || "classic";
   const size = (url.searchParams.get("size") || "regular").trim() || "regular";
-  const flag = (url.searchParams.get("glyph") || url.searchParams.get("pfp") || "1").trim().toLowerCase();
-  const glyph = ["0", "no", "off", "false"].includes(flag) ? "0" : "1";
+  const glyph = on(url, "glyph");
+  const pfp = on(url, "pfp");
   if (!MODES.has(theme)) {
     send(res, 200, "image/svg+xml; charset=utf-8", errorSvg("unknown theme " + theme), 60);
     return;
@@ -83,14 +88,14 @@ async function handle(req, res) {
     send(res, 200, "image/svg+xml; charset=utf-8", errorSvg("unknown size " + size), 60);
     return;
   }
-  const key = [username.toLowerCase(), theme, size, glyph].join("\0");
+  const key = [username.toLowerCase(), theme, size, glyph, pfp].join("\0");
   const hit = cache.get(key);
   if (hit && hit.expires > Date.now()) {
     send(res, 200, "image/svg+xml; charset=utf-8", hit.svg, TTL);
     return;
   }
   try {
-    const svg = await draw(username, theme, size, glyph);
+    const svg = await draw(username, theme, size, glyph, pfp);
     cache.set(key, { expires: Date.now() + TTL * 1000, svg });
     send(res, 200, "image/svg+xml; charset=utf-8", svg, TTL);
   } catch (error) {

@@ -65,9 +65,10 @@ The files in `dist/` use the theme name, then the size: `classic-regular.svg`.
 | `username` | yes |  | GitHub login. `user` is the same parameter. |
 | `theme` | no | `classic` | One of the themes above. |
 | `size` | no | `regular` | One of the sizes above. |
-| `glyph` | no | on | `0`, `no`, `off`, or `false` hides the profile photo. `pfp` is the same parameter. |
+| `glyph` | no | on | `0`, `no`, `off`, or `false` keeps the original profile photo. The Nothing glyph is left off. |
+| `pfp` | no | on | `0`, `no`, `off`, or `false` leaves the profile photo off. The corner mark returns. |
 
-`glyph=0` leaves the profile photo off. `pfp=0` does the same. The corner mark returns when the photo is off.
+`glyph=0` draws the original profile photo. `pfp=0` leaves the photo off.
 
 ## Examples
 
@@ -95,13 +96,21 @@ This is the default. You can leave `theme` and `size` off and get this card.
 
 ![contributions classic regular](dist/itsrealkaran/classic-regular.svg)
 
-#### regular, no photo
+#### regular, original photo
 
-`glyph=0` hides the profile photo. `pfp=0` is the same parameter. The corner mark returns.
+`glyph=0` keeps the original profile photo. The Nothing glyph is left off.
 
 `https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic&size=regular&glyph=0`
 
-![contributions classic regular without the profile photo](dist/itsrealkaran/classic-regular-glyph.svg)
+![contributions classic regular with the original profile photo](dist/itsrealkaran/classic-regular-glyph.svg)
+
+#### regular, no photo
+
+`pfp=0` leaves the profile photo off. The corner mark returns.
+
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic&size=regular&pfp=0`
+
+![contributions classic regular without the profile photo](dist/itsrealkaran/classic-regular-pfp.svg)
 
 #### wide
 

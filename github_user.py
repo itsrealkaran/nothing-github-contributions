@@ -4,6 +4,7 @@ When the logged-in account is that user, owned private repositories
 count toward stars and languages. Private repository names are never returned.
 """
 
+import base64
 import json
 import os
 import subprocess
@@ -166,7 +167,7 @@ def _calendar(login, start, end):
     return calendar["totalContributions"], days
 
 
-def contributions(login, glyph=True):
+def contributions(login, glyph=True, pfp=True):
     info = profile(login)
     now = datetime.now(timezone.utc).replace(microsecond=0)
     last_year, _days = _calendar(login, now - timedelta(days=364), now)
@@ -194,20 +195,36 @@ def contributions(login, glyph=True):
         "longest": longest,
         "languages": _top_public(repos),
         "days": all_days,
-        "glyph": _glyph(login) if glyph else [],
+        "glyph": _glyph(login) if pfp and glyph else [],
+        "photo": _photo(login) if pfp and not glyph else "",
     }
+
+
+def _avatar(login):
+    request = urllib.request.Request(
+        f"https://github.com/{login}.png",
+        headers={"User-Agent": "nothing-stat-card"},
+    )
+    with urllib.request.urlopen(request, timeout=20) as response:
+        return response.read()
 
 
 def _glyph(login):
     try:
-        request = urllib.request.Request(
-            f"https://github.com/{login}.png",
-            headers={"User-Agent": "nothing-stat-card"},
-        )
-        with urllib.request.urlopen(request, timeout=20) as response:
-            return glyph_cells(response.read())
+        return glyph_cells(_avatar(login))
     except (OSError, ValueError):
         return []
+
+
+def _photo(login):
+    """The original profile photo, with the glyph treatment left off."""
+    try:
+        blob = _avatar(login)
+    except (OSError, ValueError):
+        return ""
+    if not blob:
+        return ""
+    return "data:image/png;base64," + base64.b64encode(blob).decode("ascii")
 
 
 def _streaks(days):
@@ -253,7 +270,7 @@ def _top_public(repos):
 
 
 def streak(login):
-    data = contributions(login, glyph=False)
+    data = contributions(login, glyph=False, pfp=False)
     parsed = []
     for day, count in data["days"]:
         parsed.append((datetime.strptime(day, "%Y-%m-%d").date(), count))
@@ -299,7 +316,7 @@ def streak(login):
 
 
 def activity(login):
-    data = contributions(login, glyph=False)
+    data = contributions(login, glyph=False, pfp=False)
     counts = Counter()
     for day, count in data["days"]:
         counts[day[:4]] += count

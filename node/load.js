@@ -14,7 +14,9 @@ const {
   utcNow,
 } = require("./github");
 
-async function load(login, glyph) {
+async function load(login, options) {
+  const glyph = !options || options.glyph !== false;
+  const pfp = !options || options.pfp !== false;
   const data = await contributionTotals(login, { name: true });
   const [current, longest] = streaks(data.days);
   return {
@@ -30,19 +32,36 @@ async function load(login, glyph) {
     longest,
     languages: await topPublic(data.repos),
     days: data.days,
-    glyph: glyph === false ? [] : await portrait(login),
+    glyph: pfp && glyph ? await portrait(login) : [],
+    photo: pfp && !glyph ? await photo(login) : "",
   };
+}
+
+async function avatar(login) {
+  const response = await request("https://github.com/" + login + ".png", {
+    headers: { "User-Agent": "nothing-stat-card" },
+  });
+  if (response.status < 200 || response.status >= 300) return null;
+  return response.body;
 }
 
 async function portrait(login) {
   try {
-    const response = await request("https://github.com/" + login + ".png", {
-      headers: { "User-Agent": "nothing-stat-card" },
-    });
-    if (response.status < 200 || response.status >= 300) return [];
-    return cells(response.body);
+    const blob = await avatar(login);
+    if (!blob) return [];
+    return cells(blob);
   } catch (error) {
     return [];
+  }
+}
+
+async function photo(login) {
+  try {
+    const blob = await avatar(login);
+    if (!blob || !blob.length) return "";
+    return "data:image/png;base64," + blob.toString("base64");
+  } catch (error) {
+    return "";
   }
 }
 

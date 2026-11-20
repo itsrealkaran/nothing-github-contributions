@@ -1,6 +1,6 @@
 """Print one SVG for this card.
 
-    python3 draw.py LOGIN THEME SIZE [glyph]
+    python3 draw.py LOGIN THEME SIZE [glyph] [pfp]
 
 The Node route and the Python server both use this, so the picture matches.
 """
@@ -12,12 +12,12 @@ from nothing import MODES, SIZES
 from render import render
 
 
-def draw(login, theme, size, glyph=True):
+def draw(login, theme, size, glyph=True, pfp=True):
     if theme not in MODES:
         raise SystemExit(f"unknown theme {theme}")
     if size not in SIZES:
         raise SystemExit(f"unknown size {size}")
-    data = load(login, glyph=glyph)
+    data = load(login, glyph=glyph, pfp=pfp)
     if isinstance(data, dict) and not data.get("login"):
         data["login"] = login
     return render(theme, size, data)
@@ -25,12 +25,15 @@ def draw(login, theme, size, glyph=True):
 
 def main():
     if len(sys.argv) < 4:
-        raise SystemExit("usage: python3 draw.py LOGIN THEME SIZE [glyph]")
+        raise SystemExit("usage: python3 draw.py LOGIN THEME SIZE [glyph] [pfp]")
     login, theme, size = sys.argv[1:4]
     glyph = True
+    pfp = True
     if len(sys.argv) > 4:
         glyph = sys.argv[4].strip().lower() not in ("0", "no", "off", "false")
-    sys.stdout.write(draw(login, theme, size, glyph))
+    if len(sys.argv) > 5:
+        pfp = sys.argv[5].strip().lower() not in ("0", "no", "off", "false")
+    sys.stdout.write(draw(login, theme, size, glyph, pfp))
 
 
 if __name__ == "__main__":
