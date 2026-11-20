@@ -210,19 +210,29 @@ The year is a grid. Under it: the last year, the longest streak, the current str
 
 ![contributions yellow wide](dist/itsrealkaran/yellow-wide.svg)
 
-## no glyph
+## original photo
 
-`glyph=0` hides the profile photo. `pfp=0` is the same parameter.
+`glyph=0` keeps the original profile photo. The Nothing glyph is left off.
 
 **contributions** · classic · regular · glyph=0
 
 `https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic&size=regular&glyph=0`
 
-![contributions classic regular glyph off](dist/itsrealkaran/classic-regular-glyph.svg)
+![contributions classic regular original photo](dist/itsrealkaran/classic-regular-glyph.svg)
+
+## no photo
+
+`pfp=0` leaves the profile photo off. The corner mark returns.
+
+**contributions** · classic · regular · pfp=0
+
+`https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran&theme=classic&size=regular&pfp=0`
+
+![contributions classic regular without the profile photo](dist/itsrealkaran/classic-regular-pfp.svg)
 
 ## torvalds
 
-The profile photo is drawn as a glyph beside the name. `glyph=0` leaves the portrait off.
+The profile photo is drawn as a glyph beside the name. `glyph=0` keeps the original photo. `pfp=0` leaves the photo off.
 
 **contributions** · classic · wide
 

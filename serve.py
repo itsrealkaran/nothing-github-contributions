@@ -36,6 +36,11 @@ def login_ok(value):
     return all(char.isalnum() or char == "-" for char in value)
 
 
+def _on(query, name):
+    flag = (query.get(name) or ["1"])[0].strip().lower()
+    return flag not in ("0", "no", "off", "false")
+
+
 def cached(key):
     hit = _cache.get(key)
     if not hit:
@@ -79,14 +84,14 @@ class Handler(BaseHTTPRequestHandler):
             return
         theme = (query.get("theme") or ["classic"])[0].strip() or "classic"
         size = (query.get("size") or ["regular"])[0].strip() or "regular"
-        flag = (query.get("glyph") or query.get("pfp") or ["1"])[0].strip().lower()
-        glyph = flag not in ("0", "no", "off", "false")
-        key = (username.lower(), theme, size, glyph)
+        glyph = _on(query, "glyph")
+        pfp = _on(query, "pfp")
+        key = (username.lower(), theme, size, glyph, pfp)
         with _lock:
             svg = cached(key)
         if svg is None:
             try:
-                svg = draw(username, theme, size, glyph)
+                svg = draw(username, theme, size, glyph, pfp)
             except SystemExit as exc:
                 message = str(exc) or "card failed"
                 self._send(200, "image/svg+xml; charset=utf-8", error_svg(message).encode(), 60, head)

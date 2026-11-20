@@ -28,7 +28,7 @@ def _colors(mode):
 def _mini(mode, data):
     """Portrait and name, the last year, then the recent weeks."""
     colors = _colors(mode)
-    portrait = data.get("glyph") or []
+    portrait = _shown(data)
     parts = [
         open_svg(
             mode, 220, 182, f"{data['login']} contributions",
@@ -37,7 +37,7 @@ def _mini(mode, data):
     ]
     name_x = 60 if portrait else 28
     if portrait:
-        parts.append(_portrait(portrait, 14, 12, 40, colors, mode))
+        parts.append(_place(data, 14, 12, 40, colors, mode))
     parts.append(label(name_x, 28, data["name"], colors["fg"], 13, 0))
     parts.append(label(name_x, 46, f"@{data['login']}", colors["muted"], 11, 0.2))
     scale = 2.2
@@ -106,15 +106,14 @@ def _rule(x1, x2, y, colors, mode):
 
 
 def _open(mode, width, height, data):
-    mark = 0 if data.get("glyph") else 8
+    mark = 0 if _shown(data) else 8
     return open_svg(mode, width, height, f"{data['login']} contributions", mark=mark)
 
 
 def _who(data, colors, width, mode, total_size=22):
-    portrait = data.get("glyph") or []
-    if portrait:
+    if _shown(data):
         head = [
-            _portrait(portrait, 18, 14, 48, colors, mode),
+            _place(data, 18, 14, 48, colors, mode),
             label(78, 36, data["name"], colors["fg"], 16, 0),
             label(78, 56, f"@{data['login']}", colors["muted"], 12, 0.2),
         ]
@@ -128,6 +127,32 @@ def _who(data, colors, width, mode, total_size=22):
         _figure_end(f"{data['all_time']:,}", width - 20, 16, colors["figure"], scale),
         label(width - 20, 60, f"contributions since {data['year']}", colors["muted"], 12, 0.2, anchor="end"),
     ]
+
+
+def _shown(data):
+    return bool(data.get("glyph") or data.get("photo"))
+
+
+def _place(data, x, y, size, colors, mode):
+    photo = data.get("photo") or ""
+    if photo:
+        return _photo(photo, x, y, size, colors, mode)
+    return _portrait(data.get("glyph") or [], x, y, size, colors, mode)
+
+
+def _photo(href, x, y, size, colors, mode):
+    """The original profile photo, clipped to a circle. The glyph treatment stays off."""
+    cx0 = x + size / 2
+    cy0 = y + size / 2
+    contour = colors["figure"] if mode in ("red", "blue", "yellow") else colors["muted"]
+    ring = colors["mark"] if mode.endswith("-r") else contour
+    return (
+        f'<clipPath id="pfp"><circle cx="{cx0:.2f}" cy="{cy0:.2f}" r="{size / 2:.2f}"/></clipPath>'
+        f'<image href="{href}" x="{x}" y="{y}" width="{size}" height="{size}" '
+        f'clip-path="url(#pfp)" preserveAspectRatio="xMidYMid slice"/>'
+        f'<circle cx="{cx0:.2f}" cy="{cy0:.2f}" r="{size / 2:.2f}" fill="none" '
+        f'stroke="{ring}" stroke-width="0.75"/>'
+    )
 
 
 def _portrait(dots, x, y, size, colors, mode):
@@ -297,11 +322,16 @@ def _graph(days, x, y, weeks, cell, gap, colors, show=None, accent=None):
     return "".join(parts)
 
 
-def _variant(card, login, mode, size, filename, glyph=True):
+def _variant(card, login, mode, size, filename, glyph=True, pfp=True):
     url = f"https://github.com/itsrealkaran/nothing-github-contributions?username={login}&theme={mode}&size={size}"
-    if not glyph:
+    if not pfp:
+        url += "&pfp=0"
+        shown = f"{mode} · {size} · pfp=0"
+    elif not glyph:
         url += "&glyph=0"
-    shown = f"{mode} · {size}" if glyph else f"{mode} · {size} · glyph=0"
+        shown = f"{mode} · {size} · glyph=0"
+    else:
+        shown = f"{mode} · {size}"
     return [
         f"**{card}** · {shown}",
         "",
