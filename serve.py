@@ -86,12 +86,13 @@ class Handler(BaseHTTPRequestHandler):
         size = (query.get("size") or ["regular"])[0].strip() or "regular"
         glyph = _on(query, "glyph")
         pfp = _on(query, "pfp")
-        key = (username.lower(), theme, size, glyph, pfp)
+        border = (query.get("border") or [""])[0].strip() != "0"
+        key = (username.lower(), theme, size, glyph, pfp, border)
         with _lock:
             svg = cached(key)
         if svg is None:
             try:
-                svg = draw(username, theme, size, glyph, pfp)
+                svg = draw(username, theme, size, glyph, pfp, border)
             except SystemExit as exc:
                 message = str(exc) or "card failed"
                 self._send(200, "image/svg+xml; charset=utf-8", error_svg(message).encode(), 60, head)

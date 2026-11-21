@@ -11,28 +11,28 @@ from nothing import MODES, SIZES, theme
 ROOT = Path(__file__).resolve().parent
 
 
-def render(mode, size, data):
+def render(mode, size, data, border=True):
     if size == "mini":
-        return _mini(mode, data)
+        return _mini(mode, data, border)
     if size == "compact":
-        return _compact(mode, data)
+        return _compact(mode, data, border)
     if size == "wide":
-        return _wide(mode, data)
-    return _regular(mode, data)
+        return _wide(mode, data, border)
+    return _regular(mode, data, border)
 
 
 def _colors(mode):
     return theme(mode)
 
 
-def _mini(mode, data):
+def _mini(mode, data, border):
     """Portrait and name, the last year, then the recent weeks."""
     colors = _colors(mode)
     portrait = _shown(data)
     parts = [
         open_svg(
             mode, 220, 182, f"{data['login']} contributions",
-            mark=0 if portrait else 6, margin=14,
+            mark=0 if portrait else 6, margin=14, border=border,
         ),
     ]
     name_x = 60 if portrait else 28
@@ -55,10 +55,10 @@ def _mini(mode, data):
     return "\n".join(parts)
 
 
-def _compact(mode, data):
+def _compact(mode, data, border):
     colors = _colors(mode)
     parts = [
-        _open(mode, 495, 168, data),
+        _open(mode, 495, 168, data, border),
         *_who(data, colors, 495, mode),
         *([_rule(20, 475, 76, colors, mode)] if mode.endswith("-r") else []),
         *_stats(data, colors, 495, 108, 132),
@@ -66,25 +66,26 @@ def _compact(mode, data):
     return "\n".join(parts + ["</svg>"])
 
 
-def _regular(mode, data):
+def _regular(mode, data, border):
     colors = _colors(mode)
-    graph = _graph(data["days"], 20, 78, 53, 6, 2, colors, accent=_accent(mode, colors))
+    width = 440
+    graph = _graph(data["days"], 20, 78, 53, 6, 1, colors, accent=_accent(mode, colors))
     parts = [
-        _open(mode, 495, 250, data),
-        *_who(data, colors, 495, mode),
+        _open(mode, width, 250, data, border),
+        *_who(data, colors, width, mode),
         graph,
         *_year_line(data, colors, 20, 156),
-        _rule(20, 475, 176, colors, mode),
-        *_stats(data, colors, 495, 206, 228),
+        _rule(20, width - 20, 176, colors, mode),
+        *_stats(data, colors, width, 206, 228),
     ]
     return "\n".join(parts + ["</svg>"])
 
 
-def _wide(mode, data):
+def _wide(mode, data, border):
     colors = _colors(mode)
     graph = _graph(data["days"], 20, 88, 53, 13, 3, colors, accent=_accent(mode, colors))
     parts = [
-        _open(mode, 896, 318, data),
+        _open(mode, 896, 318, data, border),
         *_who(data, colors, 896, mode, total_size=28),
         graph,
         *_year_line(data, colors, 20, 224),
@@ -105,9 +106,9 @@ def _rule(x1, x2, y, colors, mode):
     return f'<line x1="{x1}" y1="{y}" x2="{x2}" y2="{y}" stroke="{stroke}"/>'
 
 
-def _open(mode, width, height, data):
+def _open(mode, width, height, data, border=True):
     mark = 0 if _shown(data) else 8
-    return open_svg(mode, width, height, f"{data['login']} contributions", mark=mark)
+    return open_svg(mode, width, height, f"{data['login']} contributions", mark=mark, border=border)
 
 
 def _who(data, colors, width, mode, total_size=22):
