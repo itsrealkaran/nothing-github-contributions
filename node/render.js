@@ -53,11 +53,11 @@ function compact(mode, data, border) {
 
 function regular(mode, data, border) {
   const colors = theme(mode);
-  const width = 440;
+  const width = 408;
   const parts = [
     open(mode, width, 250, data, border),
     ...who(data, colors, width, mode),
-    graph(data.days, 20, 78, 53, 6, 1, colors, null, accent(mode, colors)),
+    graph(data.days, 18, 78, 53, 6, 1, colors, null, accent(mode, colors)),
     ...yearLine(data, colors, 20, 156),
     rule(20, width - 20, 176, colors, mode),
     ...stats(data, colors, width, 206, 228),

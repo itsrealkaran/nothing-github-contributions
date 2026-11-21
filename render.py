@@ -68,8 +68,8 @@ def _compact(mode, data, border):
 
 def _regular(mode, data, border):
     colors = _colors(mode)
-    width = 440
-    graph = _graph(data["days"], 20, 78, 53, 6, 1, colors, accent=_accent(mode, colors))
+    width = 408
+    graph = _graph(data["days"], 18, 78, 53, 6, 1, colors, accent=_accent(mode, colors))
     parts = [
         _open(mode, width, 250, data, border),
         *_who(data, colors, width, mode),
