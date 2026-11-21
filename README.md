@@ -53,7 +53,7 @@ The numbers are a square dot grid. Day counts use that same grid in the quiet co
 | --- | --- | --- |
 | `mini` | 220×182 | The profile photo, the name, the last year, and the recent weeks. |
 | `compact` | 495×168 | The profile photo, the name, the total since the join year, and the three counts. |
-| `regular` | 440×250 | The same header, with the year grid. Default. |
+| `regular` | 408×250 | The same header, with the year grid. Default. |
 | `wide` | 896×318 | The year grid, the three counts, and the top public languages. |
 
 The files in `dist/` use the theme name, then the size: `classic-regular.svg`.
