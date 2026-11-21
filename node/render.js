@@ -4,18 +4,18 @@ const { dots, label, openSvg } = require("./frame");
 const { theme } = require("./nothing");
 const { add, commas, f, fixed, pyRound, sub } = require("./format");
 
-function render(mode, size, data) {
-  if (size === "mini") return mini(mode, data);
-  if (size === "compact") return compact(mode, data);
-  if (size === "wide") return wide(mode, data);
-  return regular(mode, data);
+function render(mode, size, data, border = true) {
+  if (size === "mini") return mini(mode, data, border);
+  if (size === "compact") return compact(mode, data, border);
+  if (size === "wide") return wide(mode, data, border);
+  return regular(mode, data, border);
 }
 
-function mini(mode, data) {
+function mini(mode, data, border) {
   const colors = theme(mode);
   const portrait = shown(data);
   const parts = [
-    openSvg(mode, 220, 182, data.login + " contributions", portrait ? 0 : 6, 14),
+    openSvg(mode, 220, 182, data.login + " contributions", portrait ? 0 : 6, 14, border),
   ];
   const nameX = portrait ? 60 : 28;
   if (portrait) parts.push(place(data, 14, 12, 40, colors, mode));
@@ -39,10 +39,10 @@ function mini(mode, data) {
   return parts.join("\n");
 }
 
-function compact(mode, data) {
+function compact(mode, data, border) {
   const colors = theme(mode);
   const parts = [
-    open(mode, 495, 168, data),
+    open(mode, 495, 168, data, border),
     ...who(data, colors, 495, mode),
     ...(mode.endsWith("-r") ? [rule(20, 475, 76, colors, mode)] : []),
     ...stats(data, colors, 495, 108, 132),
@@ -51,24 +51,25 @@ function compact(mode, data) {
   return parts.join("\n");
 }
 
-function regular(mode, data) {
+function regular(mode, data, border) {
   const colors = theme(mode);
+  const width = 440;
   const parts = [
-    open(mode, 495, 250, data),
-    ...who(data, colors, 495, mode),
-    graph(data.days, 20, 78, 53, 6, 2, colors, null, accent(mode, colors)),
+    open(mode, width, 250, data, border),
+    ...who(data, colors, width, mode),
+    graph(data.days, 20, 78, 53, 6, 1, colors, null, accent(mode, colors)),
     ...yearLine(data, colors, 20, 156),
-    rule(20, 475, 176, colors, mode),
-    ...stats(data, colors, 495, 206, 228),
+    rule(20, width - 20, 176, colors, mode),
+    ...stats(data, colors, width, 206, 228),
     "</svg>",
   ];
   return parts.join("\n");
 }
 
-function wide(mode, data) {
+function wide(mode, data, border) {
   const colors = theme(mode);
   const parts = [
-    open(mode, 896, 318, data),
+    open(mode, 896, 318, data, border),
     ...who(data, colors, 896, mode, 28),
     graph(data.days, 20, 88, 53, 13, 3, colors, null, accent(mode, colors)),
     ...yearLine(data, colors, 20, 224),
@@ -89,9 +90,9 @@ function rule(x1, x2, y, colors, mode) {
   return `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${stroke}"/>`;
 }
 
-function open(mode, width, height, data) {
+function open(mode, width, height, data, border) {
   const mark = shown(data) ? 0 : 8;
-  return openSvg(mode, width, height, data.login + " contributions", mark);
+  return openSvg(mode, width, height, data.login + " contributions", mark, 20, border);
 }
 
 function who(data, colors, width, mode, totalSize = 22) {

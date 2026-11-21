@@ -12,7 +12,7 @@ from nothing import MODES, SIZES
 from render import render
 
 
-def draw(login, theme, size, glyph=True, pfp=True):
+def draw(login, theme, size, glyph=True, pfp=True, border=True):
     if theme not in MODES:
         raise SystemExit(f"unknown theme {theme}")
     if size not in SIZES:
@@ -20,7 +20,7 @@ def draw(login, theme, size, glyph=True, pfp=True):
     data = load(login, glyph=glyph, pfp=pfp)
     if isinstance(data, dict) and not data.get("login"):
         data["login"] = login
-    return render(theme, size, data)
+    return render(theme, size, data, border)
 
 
 def main():
