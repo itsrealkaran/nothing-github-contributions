@@ -30,7 +30,7 @@ https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkar
 ![contributions](https://github.com/itsrealkaran/nothing-github-contributions?username=itsrealkaran)
 ```
 
-Leave `theme` and `size` off for the classic regular card. An unknown username, theme, or size still returns an SVG, so the image slot in a README stays intact.
+Leave `theme` and `size` off for the classic regular card. It has a hairline border and a small corner. An unknown username, theme, or size still returns an SVG, so the image slot in a README stays intact.
 
 ## Themes
 
@@ -53,7 +53,7 @@ The numbers are a square dot grid. Day counts use that same grid in the quiet co
 | --- | --- | --- |
 | `mini` | 220×182 | The profile photo, the name, the last year, and the recent weeks. |
 | `compact` | 495×168 | The profile photo, the name, the total since the join year, and the three counts. |
-| `regular` | 495×250 | The same header, with the year grid. Default. |
+| `regular` | 440×250 | The same header, with the year grid. Default. |
 | `wide` | 896×318 | The year grid, the three counts, and the top public languages. |
 
 The files in `dist/` use the theme name, then the size: `classic-regular.svg`.
@@ -65,6 +65,7 @@ The files in `dist/` use the theme name, then the size: `classic-regular.svg`.
 | `username` | yes |  | GitHub login. `user` is the same parameter. |
 | `theme` | no | `classic` | One of the themes above. |
 | `size` | no | `regular` | One of the sizes above. |
+| `border` | no | `1` | `0` removes the border and uses the rounder corner. |
 | `glyph` | no | on | `0`, `no`, `off`, or `false` keeps the original profile photo. The Nothing glyph is left off. |
 | `pfp` | no | on | `0`, `no`, `off`, or `false` leaves the profile photo off. The corner mark returns. |
 
